@@ -27,9 +27,15 @@
     <ClInclude Include="StringMatcher.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Trie.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Trie.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

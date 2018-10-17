@@ -1,1 +1,3 @@
-#pragma once
+#ifndef _MEMORY_MANAGER_H_
+#define _MEMORY_MANAGER_H_
+#endif //_MEMORY_MANAGER_H_
