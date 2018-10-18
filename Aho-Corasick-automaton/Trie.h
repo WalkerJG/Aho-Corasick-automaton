@@ -38,4 +38,5 @@ void _freeTree(TreeNode *root);
 // Compare two Chinese character return true if same.
 // Assuming each Chinese character occupys two bytes.
 bool _cmpChChar(char *ch1, char *ch2);
+
 #endif //_TRIE_H_

@@ -30,12 +30,21 @@
     <ClInclude Include="Trie.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Trie.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAutomaton.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Queue.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

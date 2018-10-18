@@ -154,11 +154,14 @@
     <ClInclude Include="ACAutomaton.h" />
     <ClInclude Include="IOManager.h" />
     <ClInclude Include="MemoryManager.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="StringMatcher.h" />
     <ClInclude Include="Trie.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ACAutomaton.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Queue.c" />
     <ClCompile Include="Trie.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
