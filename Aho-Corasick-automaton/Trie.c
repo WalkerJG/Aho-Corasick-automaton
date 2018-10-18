@@ -85,6 +85,7 @@ void _freeTree(TreeNode *root) {
 		_freeTree(child);
 	free(root);
 }
+
 bool _cmpChChar(char * ch1, char * ch2)
 {
 	if (ch1[0] == ch2[0] && ch1[1] == ch2[1])
