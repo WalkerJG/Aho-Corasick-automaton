@@ -2,6 +2,7 @@
 #define _AC_AUTOMATON_H_
 #include <stdbool.h>
 #include <stdio.h>
+#define DICT_SIZE (3*1024*1024)
 typedef struct TreeNodeACA {
 	// Store Chinese Charcter
 	char val_[2];
@@ -17,23 +18,36 @@ typedef struct TreeNodeACA {
 
 	// Fail pointer
 	struct TreeNodeACA *fail;
+
+	// Keyword Id
+	long keyId;
 } TreeNodeACA;
 
 typedef struct ACAutomaton{
 	TreeNodeACA *root_;
 	TreeNodeACA *state_;
+	int key_count_[DICT_SIZE];
+	long key_num_;
 } ACAutomaton;
 
-// Insert a keyword into trie tree.
-void InsertKeywordACA(ACAutomaton *aca, char *word);
+// Match String with length size
+void matchStringACA(ACAutomaton *aca, char *str, size_t size);
 
-// Query whether a keyword is in trie tree
-bool QueryKeywordACA(ACAutomaton *aca, char *word);
+// Insert a keyword into trie tree.
+void insertKeywordACA(ACAutomaton *aca, char *word, long id);
+
+// Query whether a keyword is in trie tree.
+bool queryKeywordACA(ACAutomaton *aca, char *word);
+
+// Reset Automaton state to root.
+void resetStateACA(ACAutomaton *aca);
 
 // Build Aho-Corasick Automaton
-void BuildACA(ACAutomaton *aca, char **words, size_t size);
+void buildACA(ACAutomaton *aca, char **words, size_t size);
 
 void _addFailPointer(ACAutomaton *aca);
+
+bool _cmpChChar(char * ch1, char * ch2);
 
 // Construct a trie tree from keywords;
 void _constructACA(ACAutomaton *aca);
@@ -46,6 +60,6 @@ void _freeACATree(TreeNodeACA *root);
 
 // Compare two Chinese character return true if same.
 // Assuming each Chinese character occupys two bytes.
-bool _cmpChChar(char *ch1, char *ch2);
+bool _cmpChCharACA(char *ch1, char *ch2);
 
 #endif

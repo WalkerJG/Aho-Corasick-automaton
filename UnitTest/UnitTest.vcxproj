@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{65bd2304-ca66-41eb-a3f7-3773cf4f142d}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -50,6 +50,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Aho-Corasick-automaton\Aho-Corasick-automaton.vcxproj">
       <Project>{57c7e8ff-aed5-44d1-bf9e-1bfaa4b95581}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TrieTree\TrieTree.vcxproj">
+      <Project>{2909335b-bd50-418a-a51a-2c01248562b5}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup />
