@@ -61,7 +61,7 @@ bool QueryKeywordACA(ACAutomaton * aca, char * word)
 void BuildACA(ACAutomaton * aca, char ** words, size_t size)
 {
 	for (size_t i = 0; i < size; ++i) {
-		InsertKeyword(aca, words[i][256]);
+		InsertKeyword(aca, &words[i*256]);
 	}
 }
 
