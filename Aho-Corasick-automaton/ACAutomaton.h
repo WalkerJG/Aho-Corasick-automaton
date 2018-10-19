@@ -31,29 +31,27 @@ typedef struct ACAutomaton{
 } ACAutomaton;
 
 // Match String with length size
-void matchStringACA(ACAutomaton *aca, char *str, size_t size);
+void matchStringACA(ACAutomaton *this, char *str, size_t size);
 
 // Insert a keyword into trie tree.
-void insertKeywordACA(ACAutomaton *aca, char *word, long id);
+void insertKeywordACA(ACAutomaton *this, char *word);
 
 // Query whether a keyword is in trie tree.
-bool queryKeywordACA(ACAutomaton *aca, char *word);
+bool queryKeywordACA(ACAutomaton *this, char *word);
 
 // Reset Automaton state to root.
-void resetStateACA(ACAutomaton *aca);
+void resetStateACA(ACAutomaton *this);
 
 // Build Aho-Corasick Automaton
-void buildACA(ACAutomaton *aca, char **words, size_t size);
+void buildACA(ACAutomaton *this, char **words, size_t size);
 
-void _addFailPointer(ACAutomaton *aca);
-
-bool _cmpChChar(char * ch1, char * ch2);
+void _addFailPointer(ACAutomaton *this);
 
 // Construct a trie tree from keywords;
-void _constructACA(ACAutomaton *aca);
+void _constructACA(ACAutomaton *this);
 
 // Deconstruct a trie tree;
-void _deconstructACA(ACAutomaton *aca);
+void _deconstructACA(ACAutomaton *this);
 
 // Free trie tree in ACA
 void _freeACATree(TreeNodeACA *root);

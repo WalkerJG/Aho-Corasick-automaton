@@ -44,6 +44,9 @@
     <ClCompile Include="IOManager.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="StringMatcher.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="pattern.txt">

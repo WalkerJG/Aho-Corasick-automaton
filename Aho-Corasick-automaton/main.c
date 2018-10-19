@@ -1,15 +1,36 @@
 #include <stdio.h>
-#include "IOManager.h"
+#include "StringMatcher.h"
 //TODO: Split Trie And ACA, clean code.
 int main() {
-	IOManager io_manager;
-	_constructIO(&io_manager);
-	openPatFile(&io_manager, "pattern.txt");
-	openStrFile(&io_manager, "pattern.txt");
-	_readInBufferFromStr(&io_manager);
+	StringMatcher matcher;
+	_constructStringMatcher(&matcher);
+	matchString(&matcher, "string.txt", "pattern.txt", "output.txt");
+	_deconstructStringMatcher(&matcher);
 	return 0;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//IOManager io_manager;
+//_constructIO(&io_manager);
+//if (false == openPatFile(&io_manager, "pattern.txt")) {
+//	printf("%s", "failed to open pattern.txt\n");
+//	return -1;
+//}
+//if (false == openStrFile(&io_manager, "string.txt")) {
+//	printf("%s", "failed to open string.txt\n");
+//	return -1;
+//}
+//char *res = "ÎÒµÄÌì°¡s";
+//printf(L"%s", res);
+//char * ret = getPattern(&io_manager);
+//printf("%s", ret);
+//ret = getPattern(&io_manager);
+//printf("%s", ret);
+//ret = getPattern(&io_manager);
+//printf("%s", ret);
+//ret = getString(&io_manager);
+//printf("%s", ret);
+//////////////////////////////////////////////////////////////////////////////
 //printf("%s", "hello trie.");
 ////ACAutomaton aca;
 ////_constructACA(&aca, NULL, 0);

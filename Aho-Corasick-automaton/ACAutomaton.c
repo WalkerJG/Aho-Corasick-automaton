@@ -3,37 +3,37 @@
 #include "string.h"
 #include "Queue.h"
 
-// Matching from aca->state_
-void matchStringACA(ACAutomaton *aca, char *str, size_t size)
+// Matching from this->state_
+void matchStringACA(ACAutomaton *this, char *str, size_t size)
 {
 	size_t i = 0;
 	while (i < size) {
-		TreeNodeACA *child = aca->state_->child;
+		TreeNodeACA *child = this->state_->child;
 		//Traverse all children nodes of state_ to find whether match str[i]str[i+1]
 		while (child != NULL && !_cmpChCharACA(child->val_, &str[i])) {
 			child = child->cousin;
 		}
 		if (child == NULL) {
-			aca->state_ = aca->state_->fail;
-			if (aca->state_ == NULL) {
-				aca->state_ = aca->root_;
+			this->state_ = this->state_->fail;
+			if (this->state_ == NULL) {
+				this->state_ = this->root_;
 				i += 2;
 			}
 			continue;
 		}
 		else {
-			aca->state_ = child;
-			if (aca->state_->is_end_)
-				aca->key_count_[aca->state_->keyId] += 1;
+			this->state_ = child;
+			if (this->state_->is_end_)
+				this->key_count_[this->state_->keyId] += 1;
 		}
 		i += 2;
 
 	}
 }
 
-void insertKeywordACA(ACAutomaton * aca, char * word, long id)
+void insertKeywordACA(ACAutomaton * this, char * word)
 {
-	TreeNodeACA *curr_node = aca->root_;
+	TreeNodeACA *curr_node = this->root_;
 	for (int i = 0; word[i] != '\0'; i += 2) {
 		// Traverse all children nodes to find whether word[i] exists or not.
 		TreeNodeACA *child = curr_node->child;
@@ -54,8 +54,10 @@ void insertKeywordACA(ACAutomaton * aca, char * word, long id)
 			new_node->is_end_ = word[i + 2] == '\0' ? true : false;
 			new_node->child = NULL;
 			new_node->cousin = NULL;
-			new_node->keyId = id;
-			aca->key_num_ += 1;
+			new_node->keyId = this->key_num_;
+			this->key_num_ += word[i + 2] == '\0' ? 1 : 0;
+			if (this->key_num_ == 40790)
+				printf("%s", "here");
 			// curr_node have no children
 			if (before == curr_node) {
 				before->child = new_node;
@@ -68,9 +70,9 @@ void insertKeywordACA(ACAutomaton * aca, char * word, long id)
 	}
 }
 
-bool queryKeywordACA(ACAutomaton * aca, char * word)
+bool queryKeywordACA(ACAutomaton * this, char * word)
 {
-	TreeNodeACA *curr_node = aca->root_;
+	TreeNodeACA *curr_node = this->root_;
 	TreeNodeACA *child = NULL;
 	for (size_t i = 0; curr_node != NULL && word[i] != '\0'; i += 2) {
 		child = curr_node->child;
@@ -87,24 +89,24 @@ bool queryKeywordACA(ACAutomaton * aca, char * word)
 	return child->is_end_;
 }
 
-void resetStateACA(ACAutomaton * aca)
+void resetStateACA(ACAutomaton * this)
 {
-	aca->state_ = aca->root_;
-	memset(aca->key_count_, 0, sizeof(DICT_SIZE) * sizeof(int));
+	this->state_ = this->root_;
+	memset(this->key_count_, 0, sizeof(DICT_SIZE) * sizeof(int));
 }
 
-void buildACA(ACAutomaton * aca, char ** words, size_t size)
+void buildACA(ACAutomaton * this, char ** words, size_t size)
 {
 	for (size_t i = 0; i < size; ++i) {
 		size_t offset = i * 256;
-		insertKeywordACA(aca, ((char *)(words)) + offset, aca->key_num_);
+		insertKeywordACA(this, ((char *)(words)) + offset);
 	}
-	_addFailPointer(aca);
+	_addFailPointer(this);
 }
 
-void _addFailPointer(ACAutomaton * aca)
+void _addFailPointer(ACAutomaton * this)
 {
-	TreeNodeACA *root = aca->root_;
+	TreeNodeACA *root = this->root_;
 	Queue queue;
 	_constructQueue(&queue);
 	TreeNodeACA *child = root->child;
@@ -157,7 +159,7 @@ bool _cmpChCharACA(char * ch1, char * ch2)
 	return false;
 }
 
-void _constructACA(ACAutomaton *aca)
+void _constructACA(ACAutomaton *this)
 {
 	TreeNodeACA *root = (TreeNodeACA *)malloc(sizeof(TreeNodeACA));
 	root->child = NULL;
@@ -166,16 +168,16 @@ void _constructACA(ACAutomaton *aca)
 	root->fail = NULL;
 	memset(root->val_, 0, 2);
 
-	aca->root_ = root;
-	aca->state_ = NULL;
-	aca->key_num_ = 0;
+	this->root_ = root;
+	this->state_ = NULL;
+	this->key_num_ = 0;
 
-	memset(aca->key_count_, 0, DICT_SIZE * sizeof(int));
+	memset(this->key_count_, 0, DICT_SIZE * sizeof(int));
 }
 
-void _deconstructACA(ACAutomaton * aca)
+void _deconstructACA(ACAutomaton * this)
 {
-	TreeNodeACA *root = aca->root_;
+	TreeNodeACA *root = this->root_;
 	_freeACATree(root);
 }
 
