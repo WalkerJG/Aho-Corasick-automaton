@@ -7,10 +7,21 @@
 void matchStringACA(ACAutomaton *this, char *str, size_t size)
 {
 	size_t i = 0;
+	char tmp_ch[2];
 	while (i < size) {
 		TreeNodeACA *child = this->state_->child;
+		if (_isGB2312Char(&str[i])) {
+			tmp_ch[0] = str[0];
+			tmp_ch[1] = str[1];
+			i += 2;
+		}
+		else {
+			tmp_ch[0] = 0;
+			tmp_ch[1] = str[0];
+			i += 1;
+		}
 		//Traverse all children nodes of state_ to find whether match str[i]str[i+1]
-		while (child != NULL && !_cmpChCharACA(child->val_, &str[i])) {
+		while (child != NULL && !_cmpChCharACA(child->val_, &tmp_ch)) {
 			child = child->cousin;
 		}
 		if (child == NULL) {
@@ -34,39 +45,53 @@ void matchStringACA(ACAutomaton *this, char *str, size_t size)
 void insertKeywordACA(ACAutomaton * this, char * word)
 {
 	TreeNodeACA *curr_node = this->root_;
-	for (int i = 0; word[i] != '\0'; i += 2) {
-		// Traverse all children nodes to find whether word[i] exists or not.
-		TreeNodeACA *child = curr_node->child;
-		TreeNodeACA *before = curr_node;
+	char tmp_ch[2];
+	int i = 0;
+	while (word[i] != '\0') {
+			// Traverse all children nodes to find whether word[i] exists or not.
+			TreeNodeACA *child = curr_node->child;
+			TreeNodeACA *before = curr_node;
 
-		while (child != NULL && !_cmpChCharACA(child->val_, &word[i])) {
-			before = child;
-			child = child->cousin;
-		}
-
-		// Found charcter
-		if (child != NULL) {
-			curr_node = child;
-		}
-		else {// Not found
-			TreeNodeACA *new_node = (TreeNodeACA*)malloc(sizeof(TreeNodeACA));
-			memcpy(new_node->val_, (void *)&word[i], 2);
-			new_node->is_end_ = word[i + 2] == '\0' ? true : false;
-			new_node->child = NULL;
-			new_node->cousin = NULL;
-			new_node->keyId = this->key_num_;
-			this->key_num_ += word[i + 2] == '\0' ? 1 : 0;
-			if (this->key_num_ == 40790)
-				printf("%s", "here");
-			// curr_node have no children
-			if (before == curr_node) {
-				before->child = new_node;
+			if (_isGB2312Char(&word[i]) ){
+				tmp_ch[0] = word[0];
+					tmp_ch[1] = word[1];
+					i+=2;
 			}
 			else {
-				before->cousin = new_node;
+				tmp_ch[0] = 0;
+				tmp_ch[1] = word[0];
+				i += 1;
 			}
-			curr_node = new_node;
-		}
+			while (child != NULL && !_cmpChCharACA(child->val_, &tmp_ch)) {
+				before = child;
+				child = child->cousin;
+			}
+
+			// Found charcter
+			if (child != NULL) {
+				curr_node = child;
+			}
+			else {// Not found
+				TreeNodeACA *new_node = (TreeNodeACA*)malloc(sizeof(TreeNodeACA));
+				
+				memcpy(new_node->val_, (void *)&tmp_ch[i], 2);
+				new_node->is_end_ = word[i + 2] == '\0' ? true : false;
+				new_node->child = NULL;
+				new_node->cousin = NULL;
+				new_node->keyId = this->key_num_;
+				this->key_num_ += word[i + 2] == '\0' ? 1 : 0;
+				if (this->key_num_ == 40790)
+					printf("%s", "here");
+				// curr_node have no children
+				if (before == curr_node) {
+					before->child = new_node;
+				}
+				else {
+					before->cousin = new_node;
+				}
+				curr_node = new_node;
+			}
+		
 	}
 }
 
@@ -74,10 +99,21 @@ bool queryKeywordACA(ACAutomaton * this, char * word)
 {
 	TreeNodeACA *curr_node = this->root_;
 	TreeNodeACA *child = NULL;
+	char tmp_ch[2];
 	for (size_t i = 0; curr_node != NULL && word[i] != '\0'; i += 2) {
 		child = curr_node->child;
+		if (_isGB2312Char(&word[i])) {
+			tmp_ch[0] = word[0];
+			tmp_ch[1] = word[1];
+			i += 2;
+		}
+		else {
+			tmp_ch[0] = 0;
+			tmp_ch[1] = word[0];
+			i += 1;
+		}
 		// Find the child with same character as word[i] word[i+1
-		while (child != NULL && !_cmpChCharACA(child->val_, &word[i])) {
+		while (child != NULL && !_cmpChCharACA(child->val_, &tmp_ch)) {
 			child = child->cousin;
 		}
 		if (child == NULL) {
@@ -157,6 +193,13 @@ bool _cmpChCharACA(char * ch1, char * ch2)
 	if (ch1[0] == ch2[0] && ch1[1] == ch2[1])
 		return true;
 	return false;
+}
+
+bool _isGB2312Char(char * word)
+{
+		bool high = (unsigned char)word[0] >= (0xA1) && (unsigned char)word[0] <= (0xFE);
+	bool low = (unsigned char)word[1] >= (0xA1) && (unsigned char)word[1] <= (0xFE);
+	return high && low;
 }
 
 void _constructACA(ACAutomaton *this)

@@ -60,4 +60,6 @@ void _freeACATree(TreeNodeACA *root);
 // Assuming each Chinese character occupys two bytes.
 bool _cmpChCharACA(char *ch1, char *ch2);
 
+// Judge whether word is GB2312 character.
+bool _isGB2312Char(char*word);
 #endif
