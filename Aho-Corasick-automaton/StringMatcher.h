@@ -10,7 +10,13 @@ typedef struct StringMatcher {
 
 
 // Use patterns from pat to match string and output.
-void matchString(StringMatcher * this, char * str, char * pat, char * output);
+void matchString(StringMatcher * this, char * str, char * pat);
+
+// Output result ordered by count
+void outPutResult(StringMatcher *this, char * file);
+
+// Sort count array
+void _Qsort(StringMatcher *this, int a[], int low, int high);
 
 // Construct StringMatcher
 void _constructStringMatcher(StringMatcher *this);

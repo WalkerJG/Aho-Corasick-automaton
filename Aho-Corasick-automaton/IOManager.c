@@ -45,7 +45,6 @@ char *getPattern(IOManager *this)
 			nextWord = true;
 		}
 		else {
-			// TODO: Handle pattern cut by boundary
 			flag = _readInBufferFromPat(this);
 			if (flag == false)
 				return NULL;
@@ -59,13 +58,15 @@ char *getString(IOManager *this)
 {
 	bool flag = true;
 	if (this->str_buffer_ptr == -1)
-		_readInBufferFromStr(this);
+		flag = _readInBufferFromStr(this);
 	if (this->str_buffer_ptr == this->str_buffer_end_ptr) {
-		_readInBufferFromStr(this);
+		flag = _readInBufferFromStr(this);
 	}
-	if (flag == false);
-	return NULL;
-	return &(this->str_buffer[this->str_buffer_ptr]);
+	if (flag == false)
+		return NULL;
+	int start_ptr = this->str_buffer_ptr;
+	this->str_buffer_ptr = this->str_buffer_end_ptr;
+	return &(this->str_buffer[start_ptr]);
 }
 
 bool _readInBufferFromPat(IOManager *this)
@@ -78,11 +79,12 @@ bool _readInBufferFromPat(IOManager *this)
 	}
 	if (this->pat_buffer_ptr != 0)
 		memcpy(this->pat_buffer, this->pat_buffer + this->pat_buffer_ptr, this->pat_buffer_end_ptr - this->pat_buffer_ptr);
-	int read_size = fread((void*)(this->pat_buffer + this->pat_buffer_end_ptr - this->pat_buffer_ptr), 1, BUFFER_SIZE-(this->pat_buffer_end_ptr - this->pat_buffer_ptr), this->f_pattern);
-	if(read_size == 0) {
+	size_t read_size = fread((void*)(this->pat_buffer + this->pat_buffer_end_ptr - this->pat_buffer_ptr), 1,
+		BUFFER_SIZE - (this->pat_buffer_end_ptr - this->pat_buffer_ptr), this->f_pattern);
+	if (read_size == 0) {
 		return false;
 	}
-	this->pat_buffer_end_ptr = read_size + this->pat_buffer_end_ptr - this->pat_buffer_ptr;	
+	this->pat_buffer_end_ptr = read_size + this->pat_buffer_end_ptr - this->pat_buffer_ptr;
 	this->pat_buffer_ptr = 0;
 	this->pat_buffer[this->pat_buffer_end_ptr] = '\0';
 	return true;
@@ -98,12 +100,13 @@ bool _readInBufferFromStr(IOManager *this)
 	}
 	if (this->str_buffer_ptr != 0)
 		memcpy(this->str_buffer, this->str_buffer + this->str_buffer_ptr, BUFFER_SIZE - this->str_buffer_ptr);
-	int read_size = fread((void*)(this->str_buffer + BUFFER_SIZE - this->str_buffer_ptr), 1, this->str_buffer_ptr, this->f_string);
+	size_t read_size = fread((void*)(this->str_buffer + BUFFER_SIZE - this->str_buffer_ptr), 1, this->str_buffer_ptr, this->f_string);
 	if (read_size == 0) {
 		return false;
 	}
 	this->str_buffer_ptr = 0;
-	this->str_buffer[read_size] = '\0';
+	this->str_buffer_end_ptr = read_size;
+	this->str_buffer[this->str_buffer_end_ptr] = '\0';
 	return true;
 }
 

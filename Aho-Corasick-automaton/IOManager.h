@@ -2,7 +2,7 @@
 #define _IO_MANAGER_H_
 #include <stdbool.h>
 #include <stdio.h>
-#define BUFFER_SIZE 10240
+#define BUFFER_SIZE 102400
 
 typedef struct IOManager {
 	FILE *f_string;

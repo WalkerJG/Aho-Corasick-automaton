@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #define DICT_SIZE (3*1024*1024)
+#define MAX_WORD_LEGNTH (60)
 typedef struct TreeNodeACA {
 	// Store Chinese Charcter
 	char val_[2];
@@ -27,11 +28,12 @@ typedef struct ACAutomaton{
 	TreeNodeACA *root_;
 	TreeNodeACA *state_;
 	int key_count_[DICT_SIZE];
+	char *keyword_[DICT_SIZE];
 	long key_num_;
 } ACAutomaton;
 
 // Match String with length size
-void matchStringACA(ACAutomaton *this, char *str, size_t size);
+void matchStringACA(ACAutomaton *this, char *str);
 
 // Insert a keyword into trie tree.
 void insertKeywordACA(ACAutomaton *this, char *word);
