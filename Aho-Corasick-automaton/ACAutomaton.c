@@ -8,30 +8,18 @@
 void matchStringACA(ACAutomaton *this, char *str)
 {
 	size_t i = 0;
-	char tmp_ch[2];
 	while (str[i] != '\0') {
 		if ((unsigned char)str[i] <= 0x1F) {
 			++i;
 			continue;
 		}
-		TreeNodeACA *child = this->state_->child;
-		if (_isGB2312Char(&str[i])) {
-			tmp_ch[0] = str[i];
-			tmp_ch[1] = str[i + 1];
-		}
-		else {
-			tmp_ch[0] = 0;
-			tmp_ch[1] = str[i];
-		}
-		//Traverse all children nodes of state_ to find whether match str[i]str[i+1]
-		while (child != NULL && !_cmpChCharACA(child->val_, (char *)&tmp_ch)) {
-			child = child->cousin;
-		}
+		
+		//Traverse all children nodes of state_ to find whether match str[i]
+		TreeNodeACA *child = iterative_rbtree_search(this->state_->children, str[i]);
 		if (child == NULL) {
 			this->state_ = this->state_->fail;
 			if (this->state_ == NULL) {
 				this->state_ = this->root_;
-				i += tmp_ch[0] != 0 ? 2 : 1;
 			}
 			continue;
 		}
@@ -40,7 +28,7 @@ void matchStringACA(ACAutomaton *this, char *str)
 			if (this->state_->is_end_)
 				this->key_count_[this->state_->keyId] += 1;
 		}
-		i += tmp_ch[0] != 0 ? 2 : 1;
+		++i;
 
 	}
 }
@@ -48,58 +36,40 @@ void matchStringACA(ACAutomaton *this, char *str)
 void insertKeywordACA(ACAutomaton * this, char * word)
 {
 	TreeNodeACA *curr_node = this->root_;
-	char tmp_ch[2];
 	int i = 0;
 	while (word[i] != '\0') {
 		// Traverse all children nodes to find whether word[i] exists or not.
-		TreeNodeACA *child = curr_node->child;
+		TreeNodeACA *child = iterative_rbtree_search(curr_node->children, word[i]);
+
 		TreeNodeACA *before = curr_node;
 
-		if (_isGB2312Char(&word[i])) {
-			tmp_ch[0] = word[i];
-			tmp_ch[1] = word[i + 1];
-		}
-		else {
-			tmp_ch[0] = 0;
-			tmp_ch[1] = word[0];
-		}
-		while (child != NULL && !_cmpChCharACA(child->val_, (char *)&tmp_ch)) {
-			before = child;
-			child = child->cousin;
-		}
 
 		// Found charcter
 		if (child != NULL) {
 			curr_node = child;
 		}
 		else {// Not found
-			TreeNodeACA *new_node = (TreeNodeACA*)malloc(sizeof(TreeNodeACA));
+			TreeNodeACA *new_node = (TreeNodeACA *)malloc(sizeof(TreeNodeACA));
+			new_node->children = create_rbtree();
+			new_node->is_end_ = false;
+			new_node->fail = NULL;
+			new_node->val_ = word[i];
 
-			memcpy(new_node->val_, (void *)&tmp_ch, 2);
-			if (tmp_ch[0] != 0)
-				new_node->is_end_ = word[i + 2] == '\0' ? true : false;
-			else
-				new_node->is_end_ = word[i + 1] == '\0' ? true : false;
+			new_node->is_end_ = word[i + 1] == '\0' ? true : false;
 
-			if (new_node->is_end_)
+			if (new_node->is_end_) {
+				new_node->keyId = this->key_num_;
 				strcpy(this->keyword_[this->key_num_], word);
-			new_node->child = NULL;
-			new_node->cousin = NULL;
-			new_node->keyId = this->key_num_;
-			if (tmp_ch[0] != 0)
-				this->key_num_ += new_node->is_end_ ? 1 : 0;
-			else
-				this->key_num_ += new_node->is_end_ ? 1 : 0;
+				++this->key_num_;
+			}
 			// curr_node have no children
-			if (before == curr_node) {
-				before->child = new_node;
-			}
-			else {
-				before->cousin = new_node;
-			}
+
+			int insert_flag = insert_rbtree(before->children, word[i], new_node);
+			if (insert_flag == -1)
+				return -1;
 			curr_node = new_node;
 		}
-		i += tmp_ch[0] != 0 ? 2 : 1;
+		++i;
 
 	}
 }
@@ -108,23 +78,9 @@ bool queryKeywordACA(ACAutomaton * this, char * word)
 {
 	TreeNodeACA *curr_node = this->root_;
 	TreeNodeACA *child = NULL;
-	char tmp_ch[2];
-	for (size_t i = 0; curr_node != NULL && word[i] != '\0'; i += 2) {
-		child = curr_node->child;
-		if (_isGB2312Char(&word[i])) {
-			tmp_ch[0] = word[i];
-			tmp_ch[1] = word[i + 1];
-			i += 2;
-		}
-		else {
-			tmp_ch[0] = 0;
-			tmp_ch[1] = word[i];
-			i += 1;
-		}
-		// Find the child with same character as word[i] word[i+1
-		while (child != NULL && !_cmpChCharACA(child->val_, (char *)&tmp_ch)) {
-			child = child->cousin;
-		}
+	for (size_t i = 0; curr_node != NULL && word[i] != '\0'; ++i) {
+		child = iterative_rbtree_search(curr_node->children, word[i]);
+		
 		if (child == NULL) {
 			return false;
 		}
@@ -153,21 +109,25 @@ void _addFailPointer(ACAutomaton * this)
 {
 	TreeNodeACA *root = this->root_;
 	Queue queue;
+	Queue child_queue;
 	_constructQueue(&queue);
-	TreeNodeACA *child = root->child;
+	_constructQueue(&child_queue);
+	put_all_nodes_in_queue(root->children, &child_queue);
+	TreeNodeACA *child = NULL;
 	// Set all children nodes of root to root node
 	// TODO: Verify whether it's okay to optimize this part.
-	while (child != NULL) {
+	while ((child=PeekFrontQueue(&child_queue)) != NULL) {
 		AppendQueue(&queue, child);
+		PopFrontQueue(&child_queue);
 		child->fail = root;
-		child = child->cousin;
 	}
 	while (PeekFrontQueue(&queue) != NULL) {
 		TreeNodeACA *parent = PeekFrontQueue(&queue);
 		PopFrontQueue(&queue);
-		TreeNodeACA *child = parent->child;
-		while (child != NULL) {
+		put_all_nodes_in_queue(parent->children, &child_queue);
+		while ((child = PeekFrontQueue(&child_queue)) != NULL) {
 			AppendQueue(&queue, child);
+			PopFrontQueue(&child_queue);
 
 			// Walking along fail pointer of child's parentchildren nodes containing child->val_
 			TreeNodeACA *fail = parent->fail;
@@ -175,10 +135,8 @@ void _addFailPointer(ACAutomaton * this)
 
 			// Traverse children node of fail node
 			while (fail != NULL) {
-				TreeNodeACA *fail_child = fail->child;
-				while (fail_child != NULL && !_cmpChCharACA(fail_child->val_, child->val_)) {
-					fail_child = fail_child->cousin;
-				}
+
+				TreeNodeACA *fail_child = iterative_rbtree_search(fail->children, child->val_);
 
 				if (fail_child == NULL) {//Not Found
 					fail = fail->fail;
@@ -191,10 +149,10 @@ void _addFailPointer(ACAutomaton * this)
 			if (fail == NULL) {
 				child->fail = root;
 			}
-			child = child->cousin;
 		}
 	}
 	_deconstructQueue(&queue);
+	_deconstructQueue(&child_queue);
 }
 
 bool _cmpChCharACA(char * ch1, char * ch2)
@@ -214,11 +172,10 @@ bool _isGB2312Char(char * word)
 void _constructACA(ACAutomaton *this)
 {
 	TreeNodeACA *root = (TreeNodeACA *)malloc(sizeof(TreeNodeACA));
-	root->child = NULL;
-	root->cousin = NULL;
+	root->children = create_rbtree();
 	root->is_end_ = false;
 	root->fail = NULL;
-	memset(root->val_, 0, 2);
+	root->val_ = 0;
 
 	this->root_ = root;
 	this->state_ = NULL;
@@ -242,11 +199,11 @@ void _deconstructACA(ACAutomaton * this)
 
 void _freeACATree(TreeNodeACA *root)
 {
-	TreeNodeACA *cousin = root->cousin;
+	/*TreeNodeACA *cousin = root->cousin;
 	TreeNodeACA *child = root->child;
 	free(root);
 	if (cousin != NULL)
 		_freeACATree(cousin);
 	if (child != NULL)
-		_freeACATree(child);
+		_freeACATree(child);*/
 }

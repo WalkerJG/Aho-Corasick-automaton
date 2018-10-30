@@ -1,6 +1,7 @@
 #include "StringMatcher.h"
 #include "malloc.h"
 #include "time.h"
+#include "stdlib.h"
 #pragma warning(disable:4996)
 void matchString(StringMatcher * this, char * str, char * pat)
 {
@@ -39,20 +40,25 @@ void matchString(StringMatcher * this, char * str, char * pat)
 	 duration = ((double)end - start) / CLOCKS_PER_SEC;
 	printf("匹配时间 time=%f seconds\n", duration);
 }
+int _cmp_key_count(const key_count *a, const key_count *b)
+{
+	return a->count < b->count ? 1 : -1;
+}
 
 void outPutResult(StringMatcher *this, char * file_name)
 {
-	int total_num = this->aca_->key_num_;
+	long total_num = this->aca_->key_num_;
 	char **keywords = this->aca_->keyword_;
-	int *count = this->aca_->key_count_;
-	int *index = (int *)(malloc(sizeof(int)*total_num));
+	long *count = this->aca_->key_count_;
+	key_count *index = (key_count *)(malloc(sizeof(key_count)*total_num));
 
 	// Initialize array.
-	int i = 0;
+	long i = 0;
 	for (i = 0; i < total_num; ++i) {
-		index[i] = i;
+		index[i].count = count[i];
+		index[i].keyId = i;
 	}
-	_Qsort(this, index, 0, total_num - 1);
+	qsort(index, total_num, sizeof(key_count), _cmp_key_count);
 	//[DICT_SIZE][MAX_WORD_LEGNTH]
 	printf("统计结果:\n");
 	FILE *file = fopen(file_name, "w");
@@ -60,9 +66,9 @@ void outPutResult(StringMatcher *this, char * file_name)
 		printf("Failed to open output file");
 		return;
 	}
-	for (i = total_num - 1; i >= 0; --i) {
-		printf("%s %d\n", this->aca_->keyword_[index[i]], this->aca_->key_count_[index[i]]);
-		fprintf(file, "%s %d\n", this->aca_->keyword_[index[i]], this->aca_->key_count_[index[i]]);
+	for (i = 0;i < total_num;++i) {
+		printf("%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
+		fprintf(file, "%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].count]);
 	}
 	fclose(file);
 	free(index);

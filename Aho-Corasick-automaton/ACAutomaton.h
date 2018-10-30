@@ -2,20 +2,19 @@
 #define _AC_AUTOMATON_H_
 #include <stdbool.h>
 #include <stdio.h>
+#include "rbtree.h"
 #define DICT_SIZE (3*1024*1024)
 #define MAX_WORD_LEGNTH (60)
+
 typedef struct TreeNodeACA {
 	// Store Chinese Charcter
-	char val_[2];
+	char val_;
 
 	// Indicating whether current path from the root to the current node is a keyword.
 	bool is_end_;
 
 	// Children
-	struct TreeNodeACA *child;
-
-	// Cousin
-	struct TreeNodeACA *cousin;
+	struct RBRoot *children;
 
 	// Fail pointer
 	struct TreeNodeACA *fail;
@@ -27,7 +26,7 @@ typedef struct TreeNodeACA {
 typedef struct ACAutomaton{
 	TreeNodeACA *root_;
 	TreeNodeACA *state_;
-	int key_count_[DICT_SIZE];
+	long key_count_[DICT_SIZE];
 	char *keyword_[DICT_SIZE];
 	long key_num_;
 } ACAutomaton;

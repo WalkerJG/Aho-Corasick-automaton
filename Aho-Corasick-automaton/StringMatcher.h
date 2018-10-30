@@ -8,7 +8,10 @@ typedef struct StringMatcher {
 	IOManager *io_;
 } StringMatcher;
 
-
+typedef struct key_count {
+	long keyId;
+	long count;
+}key_count;
 // Use patterns from pat to match string and output.
 void matchString(StringMatcher * this, char * str, char * pat);
 
