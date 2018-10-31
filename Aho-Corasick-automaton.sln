@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aho-Corasick-automaton", "Aho-Corasick-automaton\Aho-Corasick-automaton.vcxproj", "{57C7E8FF-AED5-44D1-BF9E-1BFAA4B95581}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrieTree", "TrieTree\TrieTree.vcxproj", "{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{57C7E8FF-AED5-44D1-BF9E-1BFAA4B95581}.Release|x64.Build.0 = Release|x64
 		{57C7E8FF-AED5-44D1-BF9E-1BFAA4B95581}.Release|x86.ActiveCfg = Release|Win32
 		{57C7E8FF-AED5-44D1-BF9E-1BFAA4B95581}.Release|x86.Build.0 = Release|Win32
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Debug|x64.ActiveCfg = Debug|x64
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Debug|x64.Build.0 = Debug|x64
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Debug|x86.ActiveCfg = Debug|Win32
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Debug|x86.Build.0 = Debug|Win32
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Release|x64.ActiveCfg = Release|x64
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Release|x64.Build.0 = Release|x64
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Release|x86.ActiveCfg = Release|Win32
+		{E7837E46-9DA1-4CC7-8638-3C6C16E629A8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

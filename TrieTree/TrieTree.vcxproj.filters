@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ACAutomaton.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="IOManager.h">
+    <ClInclude Include="Trie.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="StringMatcher.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
+    <ClInclude Include="IOManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="rbtree.h">
@@ -32,37 +29,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ACAutomaton.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Queue.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="IOManager.c">
+    <ClCompile Include="Trie.c">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="StringMatcher.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="IOManager.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="rbtree.c">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="pattern.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="string.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="ptn_test.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="str_test.txt">
-      <Filter>资源文件</Filter>
-    </Text>
   </ItemGroup>
 </Project>
