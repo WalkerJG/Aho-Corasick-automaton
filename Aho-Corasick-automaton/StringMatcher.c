@@ -23,13 +23,13 @@ void matchString(StringMatcher * this, char * str, char * pat)
 		insertKeywordACA(this->aca_, ptn);
 	}
 	end = clock();
- duration = ((double)end - start) / CLOCKS_PER_SEC;
+	duration = ((double)end - start) / CLOCKS_PER_SEC;
 	printf("建立自动机时间 time=%f seconds\n", duration);
 
 	start = clock();
 	_addFailPointer(this->aca_);
 	end = clock();
-	 duration = ((double)end - start) / CLOCKS_PER_SEC;
+	duration = ((double)end - start) / CLOCKS_PER_SEC;
 	printf("建立 Fail 指针时间 time=%f seconds\n", duration);
 
 	start = clock();
@@ -37,12 +37,18 @@ void matchString(StringMatcher * this, char * str, char * pat)
 		matchStringACA(this->aca_, str);
 	}
 	end = clock();
-	 duration = ((double)end - start) / CLOCKS_PER_SEC;
+	duration = ((double)end - start) / CLOCKS_PER_SEC;
 	printf("匹配时间 time=%f seconds\n", duration);
 }
+
 int _cmp_key_count(const key_count *a, const key_count *b)
 {
-	return a->count < b->count ? 1 : -1;
+	if (a->count > b->count)
+		return -1;
+	else if (a->count < b->count)
+		return 1;
+	else
+		return 0;
 }
 
 void outPutResult(StringMatcher *this, char * file_name)
@@ -66,46 +72,14 @@ void outPutResult(StringMatcher *this, char * file_name)
 		printf("Failed to open output file");
 		return;
 	}
-	for (i = 0;i < total_num;++i) {
+	for (i = 0; i < total_num; ++i) {
 		printf("%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
-		fprintf(file, "%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].count]);
+		fprintf(file, "%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
 	}
 	fclose(file);
 	free(index);
 }
 
-
-void _Qsort(StringMatcher *this, int a[], int low, int high)
-{
-	if (low >= high)
-	{
-		return;
-	}
-	int first = low;
-	int last = high;
-	int key = a[first];/*用字表的第一个记录作为枢轴*/
-
-	while (first < last)
-	{
-		while (first < last && this->aca_->key_count_[a[last]] >= this->aca_->key_count_[key])
-		{
-			--last;
-		}
-
-		a[first] = a[last];/*将比第一个小的移到低端*/
-
-		while (first < last && this->aca_->key_count_[a[first]] <= this->aca_->key_count_[key])
-		{
-			++first;
-		}
-
-		a[last] = a[first];
-		/*将比第一个大的移到高端*/
-	}
-	a[first] = key;/*枢轴记录到位*/
-	_Qsort(this, a, low, first - 1);
-	_Qsort(this, a, first + 1, high);
-}
 
 void _constructStringMatcher(StringMatcher * this)
 {
@@ -118,12 +92,12 @@ void _constructStringMatcher(StringMatcher * this)
 
 void _deconstructStringMatcher(StringMatcher *this)
 {
-	if (this->aca_ != NULL) {
-		_deconstructACA(this->aca_);
-		free(this->aca_);
-	}
-	if (this->io_ != NULL) {
-		_deconstructIO(this->io_);
-		free(this->io_);
-	}
+	//if (this->aca_ != NULL) {
+	//	_deconstructACA(this->aca_);
+	//	free(this->aca_);
+	//}
+	//if (this->io_ != NULL) {
+	//	_deconstructIO(this->io_);
+	//	free(this->io_);
+	//}
 }

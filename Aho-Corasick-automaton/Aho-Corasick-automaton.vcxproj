@@ -165,12 +165,6 @@
     <ClCompile Include="rbtree.c" />
     <ClCompile Include="StringMatcher.c" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="pattern.txt" />
-    <Text Include="ptn_test.txt" />
-    <Text Include="string.txt" />
-    <Text Include="str_test.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

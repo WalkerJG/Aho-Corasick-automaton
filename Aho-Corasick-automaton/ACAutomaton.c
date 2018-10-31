@@ -17,9 +17,14 @@ void matchStringACA(ACAutomaton *this, char *str)
 		//Traverse all children nodes of state_ to find whether match str[i]
 		TreeNodeACA *child = iterative_rbtree_search(this->state_->children, str[i]);
 		if (child == NULL) {
-			this->state_ = this->state_->fail;
-			if (this->state_ == NULL) {
-				this->state_ = this->root_;
+			if (this->state_ == this->root_) {
+				++i;
+			}
+			else {
+				this->state_ = this->state_->fail;
+				if (this->state_ == NULL) {
+					this->state_ = this->root_;
+				}
 			}
 			continue;
 		}
@@ -155,19 +160,6 @@ void _addFailPointer(ACAutomaton * this)
 	_deconstructQueue(&child_queue);
 }
 
-bool _cmpChCharACA(char * ch1, char * ch2)
-{
-	if (ch1[0] == ch2[0] && ch1[1] == ch2[1])
-		return true;
-	return false;
-}
-
-bool _isGB2312Char(char * word)
-{
-	bool high = (unsigned char)word[0] >= (0xA1) && (unsigned char)word[0] <= (0xFE);
-	bool low = (unsigned char)word[1] >= (0xA1) && (unsigned char)word[1] <= (0xFE);
-	return high && low;
-}
 
 void _constructACA(ACAutomaton *this)
 {

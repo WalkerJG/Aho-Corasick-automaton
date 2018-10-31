@@ -35,9 +35,15 @@ void matchKeywords(StringMatcher * this, char * keywords, char * pat)
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
 	printf("Æ¥ÅäÊ±¼ä time=%f seconds\n", duration);
 }
+
 int _cmp_key_count(const key_count *a, const key_count *b)
 {
-	return a->count < b->count ? 1 : -1;
+	if (a->count > b->count)
+		return -1;
+	else if (a->count < b->count)
+		return 1;
+	else
+		return 0;
 }
 
 
@@ -81,12 +87,12 @@ void _constructStringMatcher(StringMatcher * this)
 
 void _deconstructStringMatcher(StringMatcher *this)
 {
-	if (this->trie_ != NULL) {
-		_deconstructTrie(this->trie_);
-		free(this->trie_);
-	}
-	if (this->io_ != NULL) {
-		_deconstructIO(this->io_);
-		free(this->io_);
-	}
+	//if (this->trie_ != NULL) {
+	//	_deconstructTrie(this->trie_);
+	//	free(this->trie_);
+	//}
+	//if (this->io_ != NULL) {
+	//	_deconstructIO(this->io_);
+	//	free(this->io_);
+	//}
 }

@@ -7,6 +7,7 @@
 typedef int Type;
 typedef struct TreeNodeACA * ValType;
 typedef struct Queue Queue;
+
 // 红黑树的节点
 typedef struct RBTreeNode {
 	unsigned char color;        // 颜色(RED 或 BLACK)
