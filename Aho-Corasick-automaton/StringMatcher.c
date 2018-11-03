@@ -65,15 +65,13 @@ void outPutResult(StringMatcher *this, char * file_name)
 		index[i].keyId = i;
 	}
 	qsort(index, total_num, sizeof(key_count), _cmp_key_count);
-	//[DICT_SIZE][MAX_WORD_LEGNTH]
-	printf("统计结果:\n");
 	FILE *file = fopen(file_name, "w");
 	if (!file) {
 		printf("Failed to open output file");
 		return;
 	}
 	for (i = 0; i < total_num; ++i) {
-		printf("%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
+		//printf("%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
 		fprintf(file, "%s %d\n", this->aca_->keyword_[index[i].keyId], this->aca_->key_count_[index[i].keyId]);
 	}
 	fclose(file);

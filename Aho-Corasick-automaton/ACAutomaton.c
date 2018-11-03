@@ -71,7 +71,7 @@ void insertKeywordACA(ACAutomaton * this, char * word)
 
 			int insert_flag = insert_rbtree(before->children, word[i], new_node);
 			if (insert_flag == -1)
-				return -1;
+				return ;
 			curr_node = new_node;
 		}
 		++i;

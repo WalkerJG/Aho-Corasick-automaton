@@ -24,7 +24,7 @@ void matchKeywords(StringMatcher * this, char * keywords, char * pat)
 	}
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("建立自动机时间 time=%f seconds\n", duration);
+	printf("建立 Trie 树时间 time=%f seconds\n", duration);
 
 	start = clock();
 	char *keyword = NULL;
@@ -61,16 +61,14 @@ void outPutResult(StringMatcher *this, char * file_name)
 		index[i].keyId = i;
 	}
 	qsort(index, total_num, sizeof(key_count), _cmp_key_count);
-	//[DICT_SIZE][MAX_WORD_LEGNTH]
-	printf("统计结果:\n");
 	FILE *file = fopen(file_name, "w");
 	if (!file) {
 		printf("Failed to open output file");
 		return;
 	}
 	for (i = 0; i < total_num; ++i) {
-		printf("%s %d\n", this->trie_->keyword_[index[i].keyId], this->trie_->key_count_[index[i].keyId]);
-		fprintf(file, "%s %d\n", this->trie_->keyword_[index[i].keyId], this->trie_->key_count_[index[i].count]);
+		//printf("%s %d\n", this->trie_->keyword_[index[i].keyId], this->trie_->key_count_[index[i].keyId]);
+		fprintf(file, "%s %d\n", this->trie_->keyword_[index[i].keyId], this->trie_->key_count_[index[i].keyId]);
 	}
 	fclose(file);
 	free(index);
