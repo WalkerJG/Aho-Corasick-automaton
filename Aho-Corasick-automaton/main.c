@@ -15,5 +15,6 @@ int main(int argc, char **argv) {
 	outPutResult(&matcher, argv[3]);
 	printf("∆•≈‰ÕÍ≥…\n");
 	_deconstructStringMatcher(&matcher);
+	getchar();
 	return 0;
 }
