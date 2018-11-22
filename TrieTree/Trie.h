@@ -2,7 +2,7 @@
 #define _AC_AUTOMATON_H_
 #include <stdbool.h>
 #include <stdio.h>
-#include "rbtree.h"
+#include "RBTree.h"
 #define DICT_SIZE (3*1024*1024)
 #define MAX_WORD_LEGNTH (60)
 

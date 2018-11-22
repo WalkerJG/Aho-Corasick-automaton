@@ -24,7 +24,7 @@ void matchKeywords(StringMatcher * this, char * keywords, char * pat)
 	}
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("建立 Trie 树时间 time=%f seconds\n", duration);
+	printf("Building Trie Time: time=%f seconds\n", duration);
 
 	start = clock();
 	char *keyword = NULL;
@@ -33,7 +33,7 @@ void matchKeywords(StringMatcher * this, char * keywords, char * pat)
 	}
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("匹配时间 time=%f seconds\n", duration);
+	printf("Matching Time: time=%f seconds\n", duration);
 }
 
 int _cmp_key_count(const key_count *a, const key_count *b)

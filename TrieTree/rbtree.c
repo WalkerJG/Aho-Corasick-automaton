@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "rbtree.h"
+#include "RBTree.h"
 #define rb_parent(r)   ((r)->parent)
 #define rb_color(r) ((r)->color)
 #define rb_is_red(r)   ((r)->color==RED)

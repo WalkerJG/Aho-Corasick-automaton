@@ -38,7 +38,7 @@ char *getPattern(IOManager *this)
 	while (!nextWord) {
 		curr = this->pat_buffer_ptr;
 		start = this->pat_buffer_ptr;
-		for (; curr < this->pat_buffer_end_ptr && this->pat_buffer[curr] != '\n'; ++curr);
+		for (; curr < this->pat_buffer_end_ptr && (this->pat_buffer[curr] != '\n' && this->pat_buffer[curr] != '\r'); ++curr);
 		if (curr < this->pat_buffer_end_ptr) {
 			this->pat_buffer[curr] = '\0';
 			this->pat_buffer_ptr = curr + 1;
@@ -46,8 +46,14 @@ char *getPattern(IOManager *this)
 		}
 		else {
 			flag = _readInBufferFromPat(this);
-			if (flag == false)
-				return NULL;
+			if (flag == false) {
+				if (start == this->pat_buffer_end_ptr)
+					return NULL;
+				else {
+					this->pat_buffer_ptr = curr;
+					return &(this->pat_buffer[start]);
+				}
+			}
 		}
 
 	}

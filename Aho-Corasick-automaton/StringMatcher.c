@@ -24,13 +24,13 @@ void matchString(StringMatcher * this, char * str, char * pat)
 	}
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("建立自动机时间 time=%f seconds\n", duration);
+	printf("Time to build automaton: time=%f seconds\n", duration);
 
 	start = clock();
 	_addFailPointer(this->aca_);
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("建立 Fail 指针时间 time=%f seconds\n", duration);
+	printf("Time to build failed pointer: time=%f seconds\n", duration);
 
 	start = clock();
 	while ((str = getString(this->io_)) != NULL) {
@@ -38,7 +38,7 @@ void matchString(StringMatcher * this, char * str, char * pat)
 	}
 	end = clock();
 	duration = ((double)end - start) / CLOCKS_PER_SEC;
-	printf("匹配时间 time=%f seconds\n", duration);
+	printf("Matching Time: time=%f seconds\n", duration);
 }
 
 int _cmp_key_count(const key_count *a, const key_count *b)

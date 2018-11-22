@@ -9,16 +9,21 @@ void matchStringACA(ACAutomaton *this, char *str)
 {
 	size_t i = 0;
 	while (str[i] != '\0') {
-		if ((unsigned char)str[i] <= 0x1F) {
+		/*if ((unsigned char)str[i] <= 0x1F) {
 			++i;
 			continue;
 		}
-		
+	        */
+		if(str[i] == '\r' || str[i] == '\n'){
+			++i;
+			continue;
+		}	
 		//Traverse all children nodes of state_ to find whether match str[i]
 		TreeNodeACA *child = iterative_rbtree_search(this->state_->children, str[i]);
 		if (child == NULL) {
 			if (this->state_ == this->root_) {
 				++i;
+				continue;
 			}
 			else {
 				this->state_ = this->state_->fail;
@@ -32,6 +37,13 @@ void matchStringACA(ACAutomaton *this, char *str)
 			this->state_ = child;
 			if (this->state_->is_end_)
 				this->key_count_[this->state_->keyId] += 1;
+
+			TreeNodeACA *tmp = this->state_;
+			while (tmp != this->root_) {
+				tmp = tmp->fail;
+				if (tmp->is_end_)
+					this->key_count_[tmp->keyId] += 1;
+			}
 		}
 		++i;
 
@@ -52,6 +64,12 @@ void insertKeywordACA(ACAutomaton * this, char * word)
 		// Found charcter
 		if (child != NULL) {
 			curr_node = child;
+			if(curr_node->is_end_ == false && word[i+1] == '\0'){
+				curr_node->is_end_ = true;
+				curr_node->keyId = this->key_num_;
+				strcpy(this->keyword_[this->key_num_], word);
+				++this->key_num_;
+				}
 		}
 		else {// Not found
 			TreeNodeACA *new_node = (TreeNodeACA *)malloc(sizeof(TreeNodeACA));

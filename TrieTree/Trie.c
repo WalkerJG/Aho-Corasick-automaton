@@ -27,6 +27,15 @@ void insertKeyword(Trie * this, char * word)
 		// Found charcter
 		if (child != NULL) {
 			curr_node = child;
+			if(curr_node->is_end_ == false && word[i+1] == '\0'){
+				curr_node->is_end_ = true; 
+
+				if (curr_node->is_end_) {
+					curr_node->keyId = this->key_num_;
+					strcpy(this->keyword_[this->key_num_], word);
+					++this->key_num_;
+				}
+			}
 		}
 		else {// Not found
 			TreeNode *new_node = (TreeNode *)malloc(sizeof(TreeNode));

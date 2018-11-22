@@ -38,10 +38,12 @@ char *getPattern(IOManager *this)
 	while (!nextWord) {
 		curr = this->pat_buffer_ptr;
 		start = this->pat_buffer_ptr;
-		for (; curr < this->pat_buffer_end_ptr && this->pat_buffer[curr] != '\n'; ++curr);
+		for (; curr < this->pat_buffer_end_ptr && (this->pat_buffer[curr] != '\n' && this->pat_buffer[curr] != '\r'); ++curr);
 		if (curr < this->pat_buffer_end_ptr) {
 			this->pat_buffer[curr] = '\0';
 			this->pat_buffer_ptr = curr + 1;
+			if(this->pat_buffer[this->pat_buffer_ptr] == '\n') // Handle \r\n
+				++this->pat_buffer_ptr;
 			nextWord = true;
 		}
 		else {
@@ -67,10 +69,12 @@ char *getKeyword(IOManager *this)
 	while (!nextWord) {
 		curr = this->keyword_buffer_ptr;
 		start = this->keyword_buffer_ptr;
-		for (; curr < this->keyword_buffer_end_ptr && this->keyword_buffer[curr] != '\n'; ++curr);
+		for (; curr < this->keyword_buffer_end_ptr && (this->keyword_buffer[curr] != '\n' && this->keyword_buffer[curr] != '\r'); ++curr);
 		if (curr < this->keyword_buffer_end_ptr) {
 			this->keyword_buffer[curr] = '\0';
 			this->keyword_buffer_ptr = curr + 1;
+			if(this->keyword_buffer[this->keyword_buffer_ptr] == '\n') // Handle \r\n
+				++this->keyword_buffer_ptr;
 			nextWord = true;
 		}
 		else {

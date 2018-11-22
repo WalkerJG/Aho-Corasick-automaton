@@ -2,7 +2,7 @@
 #define _AC_AUTOMATON_H_
 #include <stdbool.h>
 #include <stdio.h>
-#include "rbtree.h"
+#include "RBTree.h"
 #define DICT_SIZE (3*1024*1024)
 #define MAX_WORD_LEGNTH (60)
 
@@ -33,6 +33,9 @@ typedef struct ACAutomaton{
 
 // Match String with length size
 void matchStringACA(ACAutomaton *this, char *str);
+
+// Transfer from current state to root.
+void backToRootACA(ACAutomaton *this);
 
 // Insert a keyword into trie tree.
 void insertKeywordACA(ACAutomaton *this, char *word);
